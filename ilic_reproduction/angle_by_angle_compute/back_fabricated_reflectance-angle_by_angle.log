@@ -1,0 +1,97 @@
+Warning: grid volume is not an integer number of pixels; cell size will be rounded to nearest pixel.
+Using MPI version 3.1, 192 processes
+-----------
+Initializing structure...
+Splitting into 3 chunks by voxels
+time for choose_chunkdivision = 0.000204086 s
+Working in 2D dimensions.
+Computational cell is 29.75 x 0.025 x 0 with resolution 40
+time for set_epsilon = 0.00202608 s
+-----------
+Warning: grid volume is not an integer number of pixels; cell size will be rounded to nearest pixel.
+Meep: using complex fields.
+field decay(t = 22.512500000000003): 0.25169328492609494 / 0.25169328492609494 = 1.0
+field decay(t = 45.025000000000006): 2.1840815481263716e-13 / 0.25169328492609494 = 8.677551921052191e-13
+run 0 finished at t = 45.025000000000006 (3602 timesteps)
+-----------
+Initializing structure...
+Splitting into 3 chunks by voxels
+time for choose_chunkdivision = 0.000609875 s
+Working in 2D dimensions.
+Computational cell is 29.75 x 0.025 x 0 with resolution 40
+     block, center = (-7.8635,0,0)
+          size (0.018,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (4.3681,4.3681,4.3681)
+     block, center = (-7.831,0,0)
+          size (0.047,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (2.1316,2.1316,2.1316)
+     block, center = (-7.7295,0,0)
+          size (0.156,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (4.3681,4.3681,4.3681)
+     block, center = (-7.5455,0,0)
+          size (0.212,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (2.1316,2.1316,2.1316)
+     block, center = (-7.3505,0,0)
+          size (0.178,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (4.3681,4.3681,4.3681)
+     block, center = (-7.25,0,0)
+          size (0.023,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (2.1316,2.1316,2.1316)
+     block, center = (-7.213,0,0)
+          size (0.051,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (4.3681,4.3681,4.3681)
+     block, center = (-7.0755,0,0)
+          size (0.224,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (2.1316,2.1316,2.1316)
+     block, center = (-6.8885,0,0)
+          size (0.15,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (4.3681,4.3681,4.3681)
+     block, center = (-6.711,0,0)
+          size (0.205,1e+20,0)
+          axes (1,0,0), (0,1,0), (0,0,1)
+          dielectric constant epsilon diagonal = (2.1316,2.1316,2.1316)
+     ...(+ 80 objects not shown)...
+time for set_epsilon = 0.012722 s
+-----------
+Meep: using complex fields.
+field decay(t = 22.512500000000003): 0.25169328492609494 / 0.25169328492609494 = 1.0
+field decay(t = 45.025000000000006): 0.00592158974175264 / 0.25169328492609494 = 0.02352700726001254
+field decay(t = 67.53750000000001): 0.004864523161471297 / 0.25169328492609494 = 0.019327186908858828
+field decay(t = 90.05000000000001): 0.0007553521186570624 / 0.25169328492609494 = 0.003001081728814726
+field decay(t = 112.5625): 0.00038467196922370027 / 0.25169328492609494 = 0.0015283362420123845
+field decay(t = 135.07500000000002): 0.00019134247880269885 / 0.25169328492609494 = 0.0007602208333006699
+field decay(t = 157.5875): 0.00012489564842385094 / 0.25169328492609494 = 0.0004962216153701686
+field decay(t = 180.10000000000002): 0.00012565715080809205 / 0.25169328492609494 = 0.000499247132655879
+field decay(t = 202.6125): 3.761667093625502e-05 / 0.25169328492609494 = 0.00014945440815912294
+field decay(t = 225.125): 2.0318504891860112e-05 / 0.25169328492609494 = 8.07272426748543e-05
+field decay(t = 247.63750000000002): 1.3810783014863204e-05 / 0.25169328492609494 = 5.487147986057111e-05
+field decay(t = 270.1375): 1.691736863083686e-05 / 0.25169328492609494 = 6.721422319949588e-05
+field decay(t = 292.65000000000003): 9.039453833668468e-06 / 0.25169328492609494 = 3.591456099562901e-05
+field decay(t = 315.1625): 7.150796186590738e-06 / 0.25169328492609494 = 2.8410754735432995e-05
+field decay(t = 337.675): 7.175161987287983e-06 / 0.25169328492609494 = 2.8507562247418863e-05
+field decay(t = 360.1875): 3.786948141693362e-06 / 0.25169328492609494 = 1.5045884687806942e-05
+field decay(t = 382.70000000000005): 2.9140108164572502e-06 / 0.25169328492609494 = 1.1577626384879102e-05
+field decay(t = 405.21250000000003): 2.3743751840840823e-06 / 0.25169328492609494 = 9.433605607639765e-06
+field decay(t = 427.725): 1.8530957829879117e-06 / 0.25169328492609494 = 7.362515783971109e-06
+field decay(t = 450.2375): 1.4429676165427292e-06 / 0.25169328492609494 = 5.733039786764394e-06
+field decay(t = 472.75): 1.0900710243541283e-06 / 0.25169328492609494 = 4.3309499682290185e-06
+field decay(t = 495.26250000000005): 6.721080401107443e-07 / 0.25169328492609494 = 2.670345537061493e-06
+field decay(t = 517.775): 7.982433707140614e-07 / 0.25169328492609494 = 3.17149252094052e-06
+field decay(t = 540.2875): 5.229158009062709e-07 / 0.25169328492609494 = 2.0775913869129064e-06
+field decay(t = 562.8000000000001): 4.2842300777873967e-07 / 0.25169328492609494 = 1.7021630430249187e-06
+field decay(t = 585.3125): 4.794089122282727e-07 / 0.25169328492609494 = 1.9047346152641386e-06
+on time step 46865 (time=585.812), 8.53523e-05 s/step
+field decay(t = 607.825): 3.0921760643558003e-07 / 0.25169328492609494 = 1.2285492897689983e-06
+field decay(t = 630.3375000000001): 2.3965622776198956e-07 / 0.25169328492609494 = 9.521756920625045e-07
+run 0 finished at t = 630.3375000000001 (50427 timesteps)
+
+Elapsed run time = 5.6673 s
