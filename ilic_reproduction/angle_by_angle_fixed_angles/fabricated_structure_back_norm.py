@@ -47,7 +47,7 @@ wvl_max = 2.250
 #frq_max = 1/wvl_min
 #fcen = (frq_min + frq_max)/2
 #df = frq_max - frq_min
-angles = np.arange(0, 81, 5)
+angles = np.arange(35, 81, 5)
 nfreq = 10
 wavelengths = np.linspace(wvl_min, wvl_max, num=nfreq)
 #frequencies = 1./wavelengths
