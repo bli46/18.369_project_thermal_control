@@ -27005,3 +27005,5 @@ field decay(t = 2250.625): 8.992764952580278e-11 / 0.6758593435824516 = 1.330567
 run 0 finished at t = 2250.625 (360100 timesteps)
 
 Elapsed run time = 2647.7095 s
+slurmstepd-d-16-3-1: error: *** JOB 12190000 ON d-16-3-1 CANCELLED AT 2021-12-09T05:11:49 ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

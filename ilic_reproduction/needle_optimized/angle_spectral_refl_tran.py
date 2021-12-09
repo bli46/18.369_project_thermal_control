@@ -61,7 +61,7 @@ def perform_tasks(n, wvl, D):
 
     # pad up structure and make the cell
     pad = 4.
-    structure_length = sum(D)
+    structure_length = np.sum(D)
     y_length = 0.
     sx = structure_length + 2*dpml + 2*pad
     sy = y_length
@@ -69,7 +69,7 @@ def perform_tasks(n, wvl, D):
 
     # make the geometry according to the specifications
     geometry_no_stack = []
-    geometry_stack = [None]*len(D)
+    geometry_stack = [None]*D.size
     location_in_cell = -structure_length/2 
     for i, element_width in enumerate(D):
         if material_spec[i] == 1:
@@ -132,7 +132,7 @@ def perform_tasks(n, wvl, D):
     pt = mp.Vector3(-0.5*sx+dpml+pad/4, 0)
     dT = 10.*1/fcen
     decay = 1e-6
-    sim.run(until_after_sources=mp.stop_when_fields_decayed(dT,mp.Ez,pt,decay))
+    sim.run(until_after_sources=10000)
     norm_refl_data = sim.get_flux_data(refl)
     norm_tran_flux = mp.get_fluxes(tran)
     sim.reset_meep()
@@ -155,7 +155,7 @@ def perform_tasks(n, wvl, D):
     sim.load_minus_flux_data(refl, norm_refl_data)
 
     # second run
-    sim.run(until_after_sources=mp.stop_when_fields_decayed(dT,mp.Ez, pt, decay))
+    sim.run(until_after_sources=10000)
     stack_refl_flux = mp.get_fluxes(refl)
     stack_tran_flux = mp.get_fluxes(tran)
     flux_freqs = mp.get_flux_freqs(refl)
@@ -175,6 +175,9 @@ def perform_tasks(n, wvl, D):
     # move the axes so they're in angle, frequency order and flip the angles to be ascending
     #flux_wvl_final = np.flip(np.moveaxis(flux_wvl_merged, -1, 0), axis=0)
     #normalized_refl_flux_final = np.flip(np.moveaxis(normalized_refl_flux_merged, -1, 0), axis=0)
+    with open('fluxes_' + str(n) + '_' + str(wvl) + '.np', 'wb') as f:
+        np.save(f, normalized_refl_flux[0])
+        np.save(f, normalized_tran_flux[0])
     return normalized_refl_flux[0], normalized_tran_flux[0]
 
 def compute_angular_spectral_tran_refl(D):

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -o optimize_qw.log
+#SBATCH -o submit_needle.log
 #SBATCH -n 700
 #SBATCH --exclusive
 
@@ -8,4 +8,4 @@ source /etc/profile
 module load anaconda/2021a
 source activate pmp
 
-mpirun -np 700 python -m mpi4py optimize_qw.py
+mpirun -np 700 python -m mpi4py compute_needle.py
