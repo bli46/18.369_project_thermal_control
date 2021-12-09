@@ -1930,3 +1930,6 @@ field decay(t = 6303.462500000001): 5.813648016284721e-07 / 0.42928908245639424 
 field decay(t = 6325.975): 5.178644985622326e-07 / 0.42928908245639424 = 1.2063304652403677e-06
 field decay(t = 6348.4875): 5.035603798925757e-07 / 0.42928908245639424 = 1.173009984347146e-06
 on time step 509444 (time=6368.05), 7.7599e-05 s/step
+slurmstepd-d-16-8-3: error: *** JOB 12156868 ON d-16-8-3 CANCELLED AT 2021-12-06T23:56:19 ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.
+slurmstepd-d-16-8-3: error: *** STEP 12156868.0 ON d-16-8-3 CANCELLED AT 2021-12-06T23:56:19 ***
