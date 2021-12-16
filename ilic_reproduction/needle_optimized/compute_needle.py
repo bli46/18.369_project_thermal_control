@@ -11,6 +11,9 @@ Al2O3 = mp.Medium(epsilon=n_Al2O3**2)
 Ta2O5 = mp.Medium(epsilon=n_Ta2O5**2)
 TiO2 = mp.Medium(epsilon=n_TiO2**2)
 
+
+# material specifications
+
 material_spec = [4,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,3,4,2,1,2,4,2,1,4,1,2,3,4,2,1,2,4,2,1,2,4,2,
 1,2,4,2,1,2,4,2,1,2,4,2,1,4,3,2,1,2,4,1,2,4,3,2,1,4,2,1,2,4,2,1,2,4,3,1,2,4,2,1,2,4,2,1,4,2,1,2,4,1,4,3,1,2,4,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,
 3,4,2,1,2,3,4,2,1,2,4,2,1,2,4,3,2,3,4,2,1,4,2,1,2,4,2,1,4,3,2,1,2,4,2,1,4,1,2,4,2,1,2,4,2,1,2,4,3,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,1,2,4,1,4,1,2,4,1,
@@ -32,8 +35,8 @@ def integrate_over_hemisphere(input_array):
     '''
     input array should go be (nfreq by nangle), with the angles range from 0 to 70 degrees
     '''
-    n_angles = 69
-    angles = np.arange(0, n_angles)
+    n_angles = 20
+    angles = np.arange(0, n_angles)*3*np.pi/180
     angles = np.reshape(angles, (1, n_angles))
     scaled_array = input_array * np.sin(angles) * np.cos(angles)
     normalization = np.sin(angles)*np.cos(angles)
@@ -41,18 +44,31 @@ def integrate_over_hemisphere(input_array):
 
 with open('save_tungsten_emissivity.npy', 'rb') as f:
     emissivity = np.load(f)
-emissivity = emissivity[:, :69]
 with open('save_planck_spectral.npy', 'rb') as f:
     planck_spectrum = np.load(f)
 with open('save_luminosity_function.npy', 'rb') as f:
     V_luminosity = np.load(f)
 
 all_refl, all_tran = compute_angular_spectral_tran_refl(D)
+with open('save_reflectance_spectrum.npy', 'wb') as f:
+    np.save(f, all_refl)
 all_refl_integrated = integrate_over_hemisphere(all_refl)
 all_tran_integrated = integrate_over_hemisphere(all_tran)
 emissivity_integrated = integrate_over_hemisphere(emissivity)
+F = 0.95
 
-measured_spectral_emittance = planck_spectrum * emissivity_integrated
+emissivity_eff = emissivity_integrated * (F * all_tran_integrated / (1-F**2 * all_refl_integrated*(1-emissivity_integrated))
+                                         + (1-F)*(1-F*all_refl_integrated)/(1 - F**2 * all_refl_integrated*(1-emissivity_integrated))
+                                         )
+
+
+#TODO : code the function to find one from the other using eff emissivity
+
+measured_spectral_emittance = planck_spectrum * emissivity_eff
+
+luminous_efficiency = np.trapz(measured_spectral_emittance*V_luminosity)/np.trapz(measured_spectral_emittance)
+
+print('Luminous efficiency', luminous_efficiency)
 
 with open('save_optimized_stack_emissive_power.npy', 'wb') as f:
     np.save(f, measured_spectral_emittance)

@@ -3,7 +3,7 @@ import math
 import cmath
 import numpy as np
 import matplotlib.pyplot as plt
-#from timeout import timeout
+import timeout
 
 ##############################################
 # Set materials and structure specifications #
@@ -24,34 +24,28 @@ Al2O3 = mp.Medium(epsilon=n_Al2O3**2)
 Ta2O5 = mp.Medium(epsilon=n_Ta2O5**2)
 TiO2 = mp.Medium(epsilon=n_TiO2**2)
 
-# material specifications
 
-material_spec = [4,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,3,4,2,1,2,4,2,1,4,1,2,3,4,2,1,2,4,2,1,2,4,2,
-1,2,4,2,1,2,4,2,1,2,4,2,1,4,3,2,1,2,4,1,2,4,3,2,1,4,2,1,2,4,2,1,2,4,3,1,2,4,2,1,2,4,2,1,4,2,1,2,4,1,4,3,1,2,4,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,
-3,4,2,1,2,3,4,2,1,2,4,2,1,2,4,3,2,3,4,2,1,4,2,1,2,4,2,1,4,3,2,1,2,4,2,1,4,1,2,4,2,1,2,4,2,1,2,4,3,2,1,2,4,2,1,2,4,2,1,2,4,2,1,2,4,1,2,4,1,4,1,2,4,1,
-4,3,1,4,2,1,4,1,4,1,2,4,2,1,4,2,1,4,1,4,1,2,4,1,4,1,4,1,2,4,1,4,1,4,1,4,2,1,4,1,4,1,2,4,1,2,4,1,2,4,1,4,1,4,1,4,1,2,4,1,4,1,4,1,4,1,4,1,4,1,4,1,4,1,
-4,1,4,1,4,1,4,1,4,1,4,1,4,1]
 
 ######################
 # Set up simulations #
 ######################
 
-resolution = 80 # pixels/um
+resolution = 40 # pixels/um
 
 # send in light with wavelength from 450 nm to 2250 nm
 wvl_min = 0.40
-wvl_max = 0.80
+wvl_max = 2.25
 #frq_min = 1/wvl_max
 #frq_max = 1/wvl_min
 #fcen = (frq_min + frq_max)/2
 #df = frq_max - frq_min
 #angles = np.arange(35, 81, 5)
-n_angles = 69
-nfreq = 10
+n_angles = 20
+nfreq = 36
 wavelengths = np.linspace(wvl_min, wvl_max, num=nfreq)
 #frequencies = 1./wavelengths
 
-#@timeout(300)
+@timeout.timeout(300)
 def perform_tasks(n, wvl, D):
     fcen = 1./wvl
     df = .01*fcen
@@ -100,8 +94,7 @@ def perform_tasks(n, wvl, D):
         def _pw_amp(x):
             return cmath.exp(1j*2*math.pi*k.dot(x+x0))
         return _pw_amp
-    sources = [ mp.Source(mp.GaussianSource(fcen, fwidth=df, is_integrated=True),
-                          # need is_integrated=True because source extends through pml
+    sources = [ mp.Source(mp.GaussianSource(fcen, fwidth=df),
                           component=mp.Ez, 
                           center=mp.Vector3(src_pos,0),
                           size=mp.Vector3(0, sy), 
@@ -132,7 +125,7 @@ def perform_tasks(n, wvl, D):
     pt = mp.Vector3(-0.5*sx+dpml+pad/4, 0)
     dT = 10.*1/fcen
     decay = 1e-6
-    sim.run(until_after_sources=10000)
+    sim.run(until_after_sources=mp.stop_when_fields_decayed(dT,mp.Ez,pt,decay))
     norm_refl_data = sim.get_flux_data(refl)
     norm_tran_flux = mp.get_fluxes(tran)
     sim.reset_meep()
@@ -155,7 +148,7 @@ def perform_tasks(n, wvl, D):
     sim.load_minus_flux_data(refl, norm_refl_data)
 
     # second run
-    sim.run(until_after_sources=10000)
+    sim.run(until_after_sources=mp.stop_when_fields_decayed(dT,mp.Ez,pt,decay))
     stack_refl_flux = mp.get_fluxes(refl)
     stack_tran_flux = mp.get_fluxes(tran)
     flux_freqs = mp.get_flux_freqs(refl)
@@ -175,19 +168,28 @@ def perform_tasks(n, wvl, D):
     # move the axes so they're in angle, frequency order and flip the angles to be ascending
     #flux_wvl_final = np.flip(np.moveaxis(flux_wvl_merged, -1, 0), axis=0)
     #normalized_refl_flux_final = np.flip(np.moveaxis(normalized_refl_flux_merged, -1, 0), axis=0)
-    with open('fluxes_' + str(n) + '_' + str(wvl) + '.np', 'wb') as f:
-        np.save(f, normalized_refl_flux[0])
-        np.save(f, normalized_tran_flux[0])
+    #with open('fluxes_' + str(n) + '_' + str(np.around(wvl, decimals=2)) + '.npy', 'wb') as f:
+    #    np.save(f, normalized_refl_flux[0])
+    #    np.save(f, normalized_tran_flux[0])
+    #    np.save(f, flux_wvl[0])
+
     return normalized_refl_flux[0], normalized_tran_flux[0]
 
-def compute_angular_spectral_tran_refl(D):
+def compute_angular_spectral_tran_refl(D, material_spec):
     n = mp.divide_parallel_processes(n_angles*nfreq)
     wvl = wavelengths[n//n_angles]
-    angle = n - n_angles * (n//n_angles)
-    refl_by_wvl, tran_by_wvl = perform_tasks(angle, wvl, D)
+    angle_num = n - n_angles * (n//n_angles)
+    angle = angle_num * 3
+    try:
+        refl_by_wvl, tran_by_wvl = perform_tasks(angle, wvl, D, material_spec)
+    except timeout.TimeoutError:
+        with open('failed_case_' + str(n) + '_' + str(np.around(wvl, decimals=2)) + '.txt', 'w') as f:
+            pass
+        refl_by_wvl, tran_by_wvl = 1., 0.0
     all_refl = mp.merge_subgroup_data(refl_by_wvl)
     all_tran = mp.merge_subgroup_data(tran_by_wvl)
     all_refl = np.reshape(all_refl, (nfreq, n_angles), order='C')
     all_tran = np.reshape(all_tran, (nfreq, n_angles), order='C')
+    
     return all_refl, all_tran
 
